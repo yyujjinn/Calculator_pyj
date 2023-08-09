@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33920.266
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator_pyj", "Calculator_pyj\Calculator_pyj.csproj", "{03C1B979-EF0B-4021-98EE-079DDA6029ED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{03C1B979-EF0B-4021-98EE-079DDA6029ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03C1B979-EF0B-4021-98EE-079DDA6029ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03C1B979-EF0B-4021-98EE-079DDA6029ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03C1B979-EF0B-4021-98EE-079DDA6029ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5806D6C6-4565-45E8-ADEB-D99D531E61DC}
+	EndGlobalSection
+EndGlobal
