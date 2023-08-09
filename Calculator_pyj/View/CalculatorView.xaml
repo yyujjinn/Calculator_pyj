@@ -198,6 +198,7 @@
                 FontSize="30" 
                 Margin="5,5,5,5"
                 Command="{Binding OperatorCommand}"
+                CommandParameter="/"
                 />
         <!--연산버튼 Multiple-->
         <Button x:Name="MultipleButton" 
@@ -209,6 +210,7 @@
                 FontSize="30" 
                 Margin="5,5,5,5"
                 Command="{Binding OperatorCommand}"
+                CommandParameter="x"
                 />
         <!--연산버튼 Plus-->
         <Button x:Name="PlusButton" 
@@ -220,6 +222,7 @@
                 FontSize="30" 
                 Margin="5,5,5,5"
                 Command="{Binding OperatorCommand}"
+                CommandParameter="+"
                 />
         <!--연산버튼 Minus-->
         <Button x:Name="MinusButton" 
@@ -231,6 +234,7 @@
                 FontSize="30" 
                 Margin="5,5,5,5"
                 Command="{Binding OperatorCommand}"
+                CommandParameter="-"
                 />
         <!--연산버튼 Equal-->
         <Button x:Name="EqualButton" 

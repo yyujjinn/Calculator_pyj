@@ -7,21 +7,21 @@ namespace Calculator.ViewModel
     public class CalculatorViewModel : INotifyPropertyChanged
     {
         #region [상수]
-        private string _result;
+        string result;
+        SelectedOperator selectedOperator;
+        double lastNumber;
 
         #endregion
 
         public string Result
         {
-            get { return _result; }
+            get { return result; }
             set
             {
-                _result = value;
+                result = value;
                 OnPropertyChanged("Result");
             }
         }
-
-        public SelectedOperator selectedOperator;
 
         public enum SelectedOperator
         {
@@ -30,6 +30,29 @@ namespace Calculator.ViewModel
             Substraction,
             Multiplication,
             Division
+        }
+
+        public class SimpleMath
+        {
+            public static double Add(double n1, double n2)
+            {
+                return n1 + n2;
+            }
+
+            public static double Subtract(double n1, double n2)
+            {
+                return n1 - n2;
+            }
+
+            public static double Muliple(double n1, double n2)
+            {
+                return n1 * n2;
+            }
+
+            public static double Divide(double n1, double n2)
+            {
+                return n1 / n2;
+            }
         }
 
         public ICommand NumberCommand { get; }
@@ -78,6 +101,8 @@ namespace Calculator.ViewModel
         private void executeAcCommand(object parameter)
         {
             Result = "0";
+            lastNumber = 0;
+            selectedOperator = SelectedOperator.None;
         }
 
         private void executePlusMinusCommand(object parameter)
@@ -101,14 +126,60 @@ namespace Calculator.ViewModel
 
         private void executeOperatorCommand(object parameter)
         {
+            if (parameter is string op)
+            {
+                switch (op)
+                {
+                    case "+":
+                        selectedOperator = SelectedOperator.Addiction;
+                        break;
+                    case "-":
+                        selectedOperator = SelectedOperator.Substraction;
+                        break;
+                    case "x":
+                        selectedOperator = SelectedOperator.Multiplication;
+                        break;
+                    case "/":
+                        selectedOperator = SelectedOperator.Division;
+                        break;
+                    default:
+                        selectedOperator = SelectedOperator.None;
+                        break;
+                }
 
+                if (double.TryParse(Result, out double numericResult))
+                {
+                    lastNumber = numericResult;
+                    Result = " ";
+                }
+            }
         }
 
 
 
         private void executeEqualCommand(object parameter)
         {
+            if (selectedOperator != SelectedOperator.None && double.TryParse(Result, out double numericResult))
+            {
+                switch (selectedOperator)
+                {
+                    case SelectedOperator.Addiction:
+                        numericResult = SimpleMath.Add(lastNumber, numericResult);
+                        break;
+                    case SelectedOperator.Substraction:
+                        numericResult = SimpleMath.Subtract(lastNumber, numericResult);
+                        break;
+                    case SelectedOperator.Multiplication:
+                        numericResult = SimpleMath.Muliple(lastNumber, numericResult);
+                        break;
+                    case SelectedOperator.Division:
+                        numericResult = SimpleMath.Divide(lastNumber, numericResult);
+                        break;
+                }
 
+                Result = numericResult.ToString();
+                selectedOperator = SelectedOperator.None;
+            }
         }
 
         private void executeDotCommand(object parameter)
