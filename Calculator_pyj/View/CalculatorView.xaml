@@ -26,6 +26,14 @@
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
+        <Label x:Name="expressionLable"
+               Grid.ColumnSpan="4"
+               Grid.Row="0"
+               HorizontalContentAlignment="Right"
+               VerticalContentAlignment="Bottom"
+               FontSize="30"
+               Content="{Binding Expression}"
+               />
         <Label x:Name="resultLabel"
                Grid.ColumnSpan="4"
                Grid.Row="1"
