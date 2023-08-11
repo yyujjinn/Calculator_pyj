@@ -1,5 +1,5 @@
-﻿using Calculator_pyj.ViewModel;
-using System;
+﻿using Calculator_pyj.Model;
+using Calculator_pyj.ViewModel;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -7,6 +7,7 @@ namespace Calculator.ViewModel
 {
     public class CalculatorViewModel : INotifyPropertyChanged
     {
+        
         #region [변수]
         string result;
         string expression;
@@ -112,7 +113,6 @@ namespace Calculator.ViewModel
                 }
             }
         }
-
         /**
         * @brief AC 버튼이 클릭되었을 때 호출되는 메서드
         * @note Patch-notes

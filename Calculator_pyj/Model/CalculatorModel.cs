@@ -8,5 +8,10 @@ namespace Calculator_pyj.Model
 {
     class CalculatorModel
     {
+
+        public void addNumber()
+        {
+
+        }
     }
 }
