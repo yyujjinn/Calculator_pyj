@@ -28,6 +28,7 @@ namespace Calculator.ViewModel
             Division
         }
 
+
         #endregion
 
         #region [속성]
