@@ -2,18 +2,19 @@
 using Calculator_pyj.ViewModel;
 using System.ComponentModel;
 using System.Windows.Input;
+using System.Collections.Generic;
 
 namespace Calculator.ViewModel
 {
     public class CalculatorViewModel : INotifyPropertyChanged
     {
-        
+
         #region [변수]
         string result;
         string expression;
-        string errorMessage;
         SelectedOperator selectedOperator;
-        double lastNumber;
+        Stack<string> operatorStack = new Stack<string>();
+        List<string> postfixTokens = new List<string>();
         public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
@@ -27,7 +28,6 @@ namespace Calculator.ViewModel
             Multiplication,
             Division
         }
-
 
         #endregion
 
@@ -54,7 +54,7 @@ namespace Calculator.ViewModel
 
         public ICommand NumberCommand { get; }
         public ICommand AcCommand { get; }
-        public ICommand PlusMinusCommand { get; }
+        public ICommand BracketCommand { get; }
         public ICommand PercentCommand { get; }
         public ICommand OperatorCommand { get; }
         public ICommand EqualCommand { get; }
@@ -67,16 +67,12 @@ namespace Calculator.ViewModel
         {
             NumberCommand = new RelayCommand<string>(executeNumberCommand);
             AcCommand = new RelayCommand<string>(executeAcCommand);
-            PlusMinusCommand = new RelayCommand<string>(executePlusMinusCommand);
+            BracketCommand = new RelayCommand<string>(executeBracketCommand);
             PercentCommand = new RelayCommand<string>(executePercentCommand);
             OperatorCommand = new RelayCommand<string>(executeOperatorCommand);
             EqualCommand = new RelayCommand<string>(executeEqualCommand);
             DotCommand = new RelayCommand<string>(executeDotCommand);
-            result = "0";
-            expression = "";
         }
-
-
 
         #endregion
 
@@ -90,6 +86,80 @@ namespace Calculator.ViewModel
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public int GetPrecedence(string op)
+        {
+            switch (op)
+            {
+                case "(":
+                case ")":
+                    return 1;
+
+                case "+":
+                case "-":
+                    return 3;
+
+                case "x":
+                case "/":
+                    return 5;
+
+                default:
+                    return 0;
+            }
+        }
+
+        /**
+        * @brief 중위표기법으로 표현된 수식을 후위표기법으로 변환하는 메서드
+        * @param propertyName: 변경된 속성의 이름
+        * @note Patch-notes
+        * 2023-08-14 | 박유진 | 
+        */
+        public string ConvertToPostfix(string expression)
+        {
+            string[] tokens = expression.Split(' ');
+
+            foreach (string token in tokens)
+            {
+                if (double.TryParse(token, out double num))
+                {
+                    postfixTokens.Add(token);
+                }
+                else if (token == "(")
+                {
+                    operatorStack.Push(token);
+                }
+                else if (token == ")")
+                {
+                    while (operatorStack.Peek() != "(")
+                    {
+                        postfixTokens.Add(operatorStack.Pop().ToString());
+                    }
+                    operatorStack.Pop();
+                }
+                else
+                {
+                    while (operatorStack.Count != 0)
+                    {
+                        if (GetPrecedence(token) <= GetPrecedence(operatorStack.Peek()))
+                        {
+                            postfixTokens.Add(operatorStack.Pop().ToString());
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    operatorStack.Push(token);
+                }
+            }
+
+            while (operatorStack.Count > 0)
+            {
+                postfixTokens.Add(operatorStack.Pop().ToString());
+            }
+
+            return string.Join(" ", postfixTokens);
         }
 
         /**
@@ -114,6 +184,7 @@ namespace Calculator.ViewModel
                 }
             }
         }
+
         /**
         * @brief AC 버튼이 클릭되었을 때 호출되는 메서드
         * @note Patch-notes
@@ -123,8 +194,9 @@ namespace Calculator.ViewModel
         {
             Result = "0";
             Expression = "0";
-            lastNumber = 0;
             selectedOperator = SelectedOperator.None;
+            operatorStack.Clear();
+            postfixTokens.Clear();
         }
 
         /**
@@ -133,13 +205,20 @@ namespace Calculator.ViewModel
         * @note Patch-notes
         * 2023-08-10 | 박유진 | +/- 버튼이 클릭될 때마다 호출되어 입력된 숫자의 부호를 변경, 결과를 string으로 변경
         */
-        private void executePlusMinusCommand(object parameter)
+        private void executeBracketCommand(object parameter)
         {
-            if (double.TryParse(Result, out double numericResult))
+            if (parameter is string bracket)
             {
-                numericResult *= -1;
-                Result = numericResult.ToString();
-                Expression = numericResult.ToString();
+                if (Result == "0")
+                {
+                    Result = bracket;
+                    Expression = bracket;
+                }
+                else
+                {
+                    Result += bracket;
+                    Expression += bracket;
+                }
             }
         }
 
@@ -156,7 +235,6 @@ namespace Calculator.ViewModel
                 numericResult *= 0.01;
                 Result = numericResult.ToString();
                 Expression = numericResult.ToString();
-
             }
         }
 
@@ -184,6 +262,7 @@ namespace Calculator.ViewModel
         {
             if (parameter is string op)
             {
+
                 switch (op)
                 {
                     case "+":
@@ -202,15 +281,11 @@ namespace Calculator.ViewModel
                         selectedOperator = SelectedOperator.None;
                         break;
                 }
-
-                if (double.TryParse(Result, out double numericResult))
-                {
-                    lastNumber = numericResult;
-                    Expression += op;
-                    Result = "";
-                }
+                Expression += " " + op + " ";
+                Result = "";
             }
         }
+
 
         /**
         * @brief = 버튼이 클릭되었을 때 호출되는 메서드
@@ -222,44 +297,86 @@ namespace Calculator.ViewModel
         private void executeEqualCommand(object parameter)
         {
             CalculatorModel calModel = new CalculatorModel();
-            if (selectedOperator != SelectedOperator.None && double.TryParse(Result, out double numericResult))
+            if (!string.IsNullOrWhiteSpace(Expression))
             {
-                switch (selectedOperator)
+                string postfixExpression = ConvertToPostfix(Expression);
+                string[] postfixTokens = postfixExpression.Split(' ');
+
+                Stack<double> valueStack = new Stack<double>();
+
+                foreach (string token in postfixTokens)
                 {
-                    case SelectedOperator.Addiction:
-                        numericResult = calModel.Add(lastNumber, numericResult);
-                        break;
-                    case SelectedOperator.Substraction:
-                        numericResult = calModel.Subtract(lastNumber, numericResult);
-                        break;
-                    case SelectedOperator.Multiplication:
-                        numericResult = calModel.Muliple(lastNumber, numericResult);
-                        break;
-                    case SelectedOperator.Division:
-                        if (numericResult != 0)
+                    if (double.TryParse(token, out double numericValue) || token == ".")
+                    {
+                        valueStack.Push(numericValue);
+                    }
+                    else if (IsOperator(token))
+                    {
+                        if (valueStack.Count >= 2)
                         {
-                            numericResult = calModel.Divide(lastNumber, numericResult);
+                            double operand2 = valueStack.Pop();
+                            double operand1 = valueStack.Pop();
+
+                            if (operand2 != 0)
+                            {
+                                double result = PerformOperation(operand1, operand2, selectedOperator);
+                                valueStack.Push(result);
+                            }
+                            else
+                            {
+                                Result = "Error";
+                            }
+
                         }
                         else
                         {
-                            errorMessage = "Error";
+                            Result = "Error";
+                            return;
                         }
-                        break;
+                    }
                 }
-                if (errorMessage == null)
+                if (valueStack.Count == 1)
                 {
-                    Result = numericResult.ToString();
-                    selectedOperator = SelectedOperator.None;
-                    Expression += "=";
+                    Result = valueStack.Pop().ToString();
                 }
                 else
                 {
-                    Result = errorMessage;
+                    Result = "Error";
                 }
             }
         }
 
-        #endregion
+        private bool IsOperator(string token)
+        {
+            return token == "+" || token == "-" || token == "x" || token == "/";
+        }
+
+        private double PerformOperation(double operand1, double operand2, SelectedOperator selectedOperator)
+        {
+            switch (selectedOperator)
+            {
+                case SelectedOperator.Addiction:
+                    return operand1 + operand2;
+                case SelectedOperator.Substraction:
+                    return operand1 - operand2;
+                case SelectedOperator.Multiplication:
+                    return operand1 * operand2;
+                case SelectedOperator.Division:
+                    if (operand2 != 0)
+                    {
+                        return operand1 / operand2;
+                    }
+                    else
+                    {
+                        Result = "Error";
+                        return 0;
+                    }
+
+            }
+            return 0;
+
+            #endregion
+        }
 
     }
 }

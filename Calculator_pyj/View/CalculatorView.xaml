@@ -10,6 +10,20 @@
     <Window.DataContext>
         <viewmodel:CalculatorViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <Style x:Key="number_button_style" TargetType="Button">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="Background" Value="Lavender"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style x:Key="operator_button_style" TargetType="Button">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="Background" Value="Thistle"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </Window.Resources>
     <Grid HorizontalAlignment="Left" Width="404" Margin="0,0,-5,-1">
         <Grid.RowDefinitions>
             <RowDefinition Height="75"/>
@@ -46,84 +60,63 @@
         <Button x:Name="ZeroButton"
                 Grid.Column="0" 
                 Grid.Row="6" 
-                Content="0" 
-                Foreground="Black"
-                Background="Lavender" 
-                Grid.ColumnSpan="2" 
-                FontSize="30" 
-                Margin="5,5,5,-12" 
+                Style="{StaticResource number_button_style}"
+                Margin="5,5,5,-12"
+                Content="0"
                 Command="{Binding NumberCommand}"
                 CommandParameter="0"
                 />
         <!--숫자 버튼 1-->
-        <Button x:Name="OneButton" 
+        <Button x:Name="OneButton"
                 Grid.Column="0" 
                 Grid.Row="5" 
-                Content="1" 
-                Foreground="Black" 
-                Background="Lavender" 
-                FontSize="30" 
-                Margin="5,5,5,5" 
+                Style="{StaticResource number_button_style}"
+                Content="1"
                 Command="{Binding NumberCommand}"
                 CommandParameter="1"
                 />
         <!--숫자 버튼 2-->
-        <Button x:Name="TwoButton" 
+        <Button x:Name="TwoButton"
                 Grid.Column="1" 
                 Grid.Row="5" 
-                Content="2" 
-                Foreground="Black" 
-                Background="Lavender" 
-                FontSize="30" 
-                Margin="5"
+                Style="{StaticResource number_button_style}"
+                Content="2"
                 Command="{Binding NumberCommand}"
                 CommandParameter="2"
                 />
         <!--숫자 버튼 3-->
-        <Button x:Name="ThreeButton" 
+        <Button x:Name="ThreeButton"
                 Grid.Column="2" 
                 Grid.Row="5" 
-                Content="3" 
-                Foreground="Black" 
-                Background="Lavender" 
-                FontSize="30" 
-                Margin="5"
+                Style="{StaticResource number_button_style}"
+                Content="3"
                 Command="{Binding NumberCommand}"
                 CommandParameter="3"
                 />
         <!--숫자 버튼 4-->
-        <Button x:Name="FourButton" 
-                Grid.Column="0"
+        <Button x:Name="FourButton"
+                Grid.Column="0" 
                 Grid.Row="4" 
-                Content="4" 
-                Foreground="Black" 
-                Background="Lavender" 
-                FontSize="30" 
-                Margin="5,5,5,5"
+                Style="{StaticResource number_button_style}"
+                Content="4"
                 Command="{Binding NumberCommand}"
                 CommandParameter="4"
                 />
         <!--숫자 버튼 5-->
-        <Button x:Name="FiveButton" 
+        <Button x:Name="FiveButton"
                 Grid.Column="1" 
                 Grid.Row="4" 
-                Content="5" 
-                Foreground="Black" 
-                Background="Lavender" 
-                FontSize="30" 
-                Margin="5,5,5,5"
+                Style="{StaticResource number_button_style}"
+                Content="5"
                 Command="{Binding NumberCommand}"
                 CommandParameter="5"
                 />
         <!--숫자 버튼 6-->
-        <Button x:Name="SixButton" 
+        <Button x:Name="SixButton"
                 Grid.Column="2" 
                 Grid.Row="4" 
-                Content="6" 
-                Foreground="Black" 
-                Background="Lavender" 
-                FontSize="30" 
-                Margin="5,5,5,5"
+                Style="{StaticResource number_button_style}"
+                Content="6"
                 Command="{Binding NumberCommand}"
                 CommandParameter="6"
                 />
@@ -131,41 +124,33 @@
         <Button x:Name="SevenButton"
                 Grid.Column="0" 
                 Grid.Row="3" 
-                Content="7" 
-                Foreground="Black" 
-                Background="Lavender"
-                FontSize="30" Margin="5,5,5,5" 
+                Style="{StaticResource number_button_style}"
+                Content="7"
                 Command="{Binding NumberCommand}"
                 CommandParameter="7"
                 />
         <!--숫자 버튼 8-->
-        <Button x:Name="EightButton" 
+        <Button x:Name="EightButton"
                 Grid.Column="1" 
                 Grid.Row="3" 
-                Content="8" 
-                Foreground="Black" 
-                Background="Lavender" 
-                FontSize="30" 
-                Margin="5,5,5,5"
+                Style="{StaticResource number_button_style}"
+                Content="8"
                 Command="{Binding NumberCommand}"
                 CommandParameter="8"
                 />
         <!--숫자 버튼 9-->
-        <Button x:Name="NineButton" 
+        <Button x:Name="NineButton"
                 Grid.Column="2" 
                 Grid.Row="3" 
-                Content="9" 
-                Foreground="Black" 
-                Background="Lavender" 
-                FontSize="30" 
-                Margin="5,5,5,5"
+                Style="{StaticResource number_button_style}"
+                Content="9"
                 Command="{Binding NumberCommand}"
                 CommandParameter="9"
                 />
 
         <!--연산버튼 AC-->
         <Button x:Name="AcButton"
-                Grid.Column="0" 
+                Grid.Column="3" 
                 Grid.Row="2" 
                 Content="AC" 
                 Foreground="Black" 
@@ -174,16 +159,28 @@
                 Margin="5,5,5,5" 
                 Command="{Binding AcCommand}"
                 />
-        <!--연산버튼 Plus/Minus-->
-        <Button x:Name="PlusMinusButton" 
-                Grid.Column="1"
+        <!--연산버튼 괄호-->
+        <Button x:Name="BracketButton1"
+                Grid.Column="0" 
                 Grid.Row="2" 
-                Content="+/-" 
+                Content="(" 
                 Foreground="Black" 
                 Background="LavenderBlush" 
                 FontSize="30" 
-                Margin="5,5,5,5"
-                Command="{Binding PlusMinusCommand}"
+                Margin="5,5,5,5" 
+                Command="{Binding BracketCommand}"
+                CommandParameter="("
+                />
+        <Button x:Name="BracketButton2"
+                Grid.Column="1" 
+                Grid.Row="2" 
+                Content=")" 
+                Foreground="Black" 
+                Background="LavenderBlush" 
+                FontSize="30" 
+                Margin="5,5,5,5" 
+                Command="{Binding BracketCommand}"
+                CommandParameter=")"
                 />
         <!--연산버튼 Percent-->
         <Button x:Name="PercentButton"
@@ -199,54 +196,43 @@
         <!--연산버튼 Devide-->
         <Button x:Name="DevideButton" 
                 Grid.Column="3" 
-                Grid.Row="2" 
+                Grid.Row="3" 
                 Content="/" 
-                Foreground="Black" 
-                Background="Thistle" 
-                FontSize="30" 
-                Margin="5,5,5,5"
+                Style="{StaticResource operator_button_style}"
                 Command="{Binding OperatorCommand}"
                 CommandParameter="/"
                 />
         <!--연산버튼 Multiple-->
         <Button x:Name="MultipleButton" 
                 Grid.Column="3" 
-                Grid.Row="3" 
+                Grid.Row="4" 
                 Content="x" 
-                Foreground="Black" 
-                Background="Thistle" 
-                FontSize="30" 
-                Margin="5,5,5,5"
+                Style="{StaticResource operator_button_style}"
                 Command="{Binding OperatorCommand}"
                 CommandParameter="x"
                 />
         <!--연산버튼 Plus-->
         <Button x:Name="PlusButton" 
                 Grid.Column="3" 
-                Grid.Row="4" 
+                Grid.Row="5" 
                 Content="+" 
-                Foreground="Black" 
-                Background="Thistle" 
-                FontSize="30" 
-                Margin="5,5,5,5"
+                Style="{StaticResource operator_button_style}"
                 Command="{Binding OperatorCommand}"
                 CommandParameter="+"
                 />
         <!--연산버튼 Minus-->
         <Button x:Name="MinusButton" 
                 Grid.Column="3" 
-                Grid.Row="5" 
+                Grid.Row="6" 
                 Content="-" 
-                Foreground="Black" 
-                Background="Thistle" 
-                FontSize="30" 
-                Margin="5,5,5,5"
+                Style="{StaticResource operator_button_style}"
+                Margin="5,5,5,-12"
                 Command="{Binding OperatorCommand}"
                 CommandParameter="-"
                 />
         <!--연산버튼 Equal-->
         <Button x:Name="EqualButton" 
-                Grid.Column="3" 
+                Grid.Column="2" 
                 Grid.Row="6" 
                 Content="=" 
                 Foreground="Black" 
@@ -257,7 +243,7 @@
                 />
         <!--연산버튼 Dot-->
         <Button x:Name="DotButton" 
-                Grid.Column="2" 
+                Grid.Column="1" 
                 Grid.Row="6" 
                 Content="." 
                 Foreground="Black" 
