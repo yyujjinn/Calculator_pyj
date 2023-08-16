@@ -24,10 +24,11 @@
             <Setter Property="Margin" Value="5"/>
         </Style>
     </Window.Resources>
-    <Grid HorizontalAlignment="Left" Width="404" Margin="0,0,-5,-1">
+    <Grid HorizontalAlignment="Left" Width="420" Margin="0,0,-5,-1">
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="75"/>
-            <RowDefinition Height="125"/>
+            <RowDefinition Height="110"/>
             <RowDefinition Height="75"/>
             <RowDefinition Height="75"/>
             <RowDefinition Height="75"/>
@@ -38,30 +39,65 @@
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="50"/>
         </Grid.ColumnDefinitions>
+        <!--History 버튼-->
+        <Button x:Name="HistoryButton"
+                Grid.Column="4"
+                Grid.Row="0"
+                Width="30"
+                Background="White"
+                BorderThickness="0"
+                Command="{Binding HistoryCommand}"
+                >
+            <ContentControl>
+                <Image Source="C:\Users\yjyu\Downloads\history (2).png"
+                       Width="Auto"
+                       HorizontalAlignment="Right">
+                </Image>
+            </ContentControl>
+        </Button>
+        <!--History 목록-->
+        <ListBox ItemsSource="{Binding HistoryItems}"
+                 Visibility="{Binding HistoryVisibility}"
+                 HorizontalAlignment="Left" 
+                 VerticalAlignment="Bottom" 
+                 Margin="5,0,0,5" 
+                 Width="390" 
+                 Height="370"
+                 Grid.Column="0"
+                 Grid.Row="3" Grid.ColumnSpan="5" Grid.RowSpan="5"
+                 Panel.ZIndex="1"
+                 Background="GhostWhite"
+                 BorderBrush="LightSlateGray"
+                 BorderThickness="3"
+                 FontSize="30"
+                 />
+        <!--입력 식-->
         <Label x:Name="expressionLable"
-               Grid.ColumnSpan="4"
-               Grid.Row="0"
+               Grid.ColumnSpan="5"
+               Grid.Row="1"
                HorizontalContentAlignment="Right"
                VerticalContentAlignment="Bottom"
                FontSize="30"
                Content="{Binding Expression}"
                />
+        <!--결과 값-->
         <Label x:Name="resultLabel"
-               Grid.ColumnSpan="4"
-               Grid.Row="1"
+               Grid.ColumnSpan="5"
+               Grid.Row="2"
                HorizontalContentAlignment="Right"
                VerticalContentAlignment="Bottom"
-               FontSize="100"
+               FontSize="90"
                Content="{Binding Result}"
                />
         <!--숫자 버튼 0-->
         <Button x:Name="ZeroButton"
                 Grid.Column="0" 
-                Grid.Row="6" 
+                Grid.Row="7" 
                 Style="{StaticResource number_button_style}"
-                Margin="5,5,5,-12"
+                Margin="5,5,5,5"
                 Content="0"
                 Command="{Binding NumberCommand}"
                 Grid.ColumnSpan="2"
@@ -70,7 +106,7 @@
         <!--숫자 버튼 1-->
         <Button x:Name="OneButton"
                 Grid.Column="0" 
-                Grid.Row="5" 
+                Grid.Row="6" 
                 Style="{StaticResource number_button_style}"
                 Content="1"
                 Command="{Binding NumberCommand}"
@@ -79,7 +115,7 @@
         <!--숫자 버튼 2-->
         <Button x:Name="TwoButton"
                 Grid.Column="1" 
-                Grid.Row="5" 
+                Grid.Row="6" 
                 Style="{StaticResource number_button_style}"
                 Content="2"
                 Command="{Binding NumberCommand}"
@@ -88,7 +124,7 @@
         <!--숫자 버튼 3-->
         <Button x:Name="ThreeButton"
                 Grid.Column="2" 
-                Grid.Row="5" 
+                Grid.Row="6" 
                 Style="{StaticResource number_button_style}"
                 Content="3"
                 Command="{Binding NumberCommand}"
@@ -97,7 +133,7 @@
         <!--숫자 버튼 4-->
         <Button x:Name="FourButton"
                 Grid.Column="0" 
-                Grid.Row="4" 
+                Grid.Row="5" 
                 Style="{StaticResource number_button_style}"
                 Content="4"
                 Command="{Binding NumberCommand}"
@@ -106,7 +142,7 @@
         <!--숫자 버튼 5-->
         <Button x:Name="FiveButton"
                 Grid.Column="1" 
-                Grid.Row="4" 
+                Grid.Row="5" 
                 Style="{StaticResource number_button_style}"
                 Content="5"
                 Command="{Binding NumberCommand}"
@@ -115,7 +151,7 @@
         <!--숫자 버튼 6-->
         <Button x:Name="SixButton"
                 Grid.Column="2" 
-                Grid.Row="4" 
+                Grid.Row="5" 
                 Style="{StaticResource number_button_style}"
                 Content="6"
                 Command="{Binding NumberCommand}"
@@ -124,7 +160,7 @@
         <!--숫자 버튼 7-->
         <Button x:Name="SevenButton"
                 Grid.Column="0" 
-                Grid.Row="3" 
+                Grid.Row="4" 
                 Style="{StaticResource number_button_style}"
                 Content="7"
                 Command="{Binding NumberCommand}"
@@ -133,7 +169,7 @@
         <!--숫자 버튼 8-->
         <Button x:Name="EightButton"
                 Grid.Column="1" 
-                Grid.Row="3" 
+                Grid.Row="4" 
                 Style="{StaticResource number_button_style}"
                 Content="8"
                 Command="{Binding NumberCommand}"
@@ -142,7 +178,7 @@
         <!--숫자 버튼 9-->
         <Button x:Name="NineButton"
                 Grid.Column="2" 
-                Grid.Row="3" 
+                Grid.Row="4" 
                 Style="{StaticResource number_button_style}"
                 Content="9"
                 Command="{Binding NumberCommand}"
@@ -152,7 +188,7 @@
         <!--연산버튼 AC-->
         <Button x:Name="AcButton"
                 Grid.Column="0" 
-                Grid.Row="2" 
+                Grid.Row="3" 
                 Content="AC" 
                 Foreground="Black" 
                 Background="LavenderBlush" 
@@ -164,7 +200,7 @@
         <!--연산버튼 Percent-->
         <Button x:Name="PercentButton"
                 Grid.Column="2" 
-                Grid.Row="2" 
+                Grid.Row="3" 
                 Content="%"
                 Foreground="Black" 
                 Background="LavenderBlush" 
@@ -175,7 +211,7 @@
         <!--연산버튼 Plus/Minus-->
         <Button x:Name="PlusMinusButton" 
                 Grid.Column="1"
-                Grid.Row="2" 
+                Grid.Row="3" 
                 Content="+/-" 
                 Foreground="Black" 
                 Background="LavenderBlush" 
@@ -186,7 +222,8 @@
         <!--연산버튼 Devide-->
         <Button x:Name="DevideButton" 
                 Grid.Column="3" 
-                Grid.Row="2" 
+                Grid.Row="3" 
+                Grid.ColumnSpan="2"
                 Content="/" 
                 Style="{StaticResource operator_button_style}"
                 Command="{Binding OperatorCommand}"
@@ -195,7 +232,8 @@
         <!--연산버튼 Multiple-->
         <Button x:Name="MultipleButton" 
                 Grid.Column="3" 
-                Grid.Row="3" 
+                Grid.Row="4" 
+                Grid.ColumnSpan="2"
                 Content="x" 
                 Style="{StaticResource operator_button_style}"
                 Command="{Binding OperatorCommand}"
@@ -204,7 +242,8 @@
         <!--연산버튼 Plus-->
         <Button x:Name="PlusButton" 
                 Grid.Column="3" 
-                Grid.Row="4" 
+                Grid.Row="5" 
+                Grid.ColumnSpan="2"
                 Content="+" 
                 Style="{StaticResource operator_button_style}"
                 Command="{Binding OperatorCommand}"
@@ -213,7 +252,8 @@
         <!--연산버튼 Minus-->
         <Button x:Name="MinusButton" 
                 Grid.Column="3" 
-                Grid.Row="5" 
+                Grid.Row="6" 
+                Grid.ColumnSpan="2"
                 Content="-" 
                 Style="{StaticResource operator_button_style}"
                 Margin="5,5,5,5"
@@ -223,23 +263,24 @@
         <!--연산버튼 Equal-->
         <Button x:Name="EqualButton" 
                 Grid.Column="3" 
-                Grid.Row="6" 
+                Grid.Row="7" 
+                Grid.ColumnSpan="2"
                 Content="=" 
                 Foreground="Black" 
                 Background="Thistle" 
                 FontSize="30" 
-                Margin="5,5,5,-12"
+                Margin="5,5,5,5"
                 Command="{Binding EqualCommand}"
                 />
         <!--연산버튼 Dot-->
         <Button x:Name="DotButton" 
                 Grid.Column="2" 
-                Grid.Row="6" 
+                Grid.Row="7" 
                 Content="." 
                 Foreground="Black" 
                 Background="Lavender" 
                 FontSize="30" 
-                Margin="5,5,5,-12"
+                Margin="5,5,5,5"
                 Command="{Binding DotCommand}"
                 />
 

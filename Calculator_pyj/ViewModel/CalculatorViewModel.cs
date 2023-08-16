@@ -3,6 +3,8 @@ using Calculator_pyj.ViewModel;
 using System.ComponentModel;
 using System.Windows.Input;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace Calculator.ViewModel
 {
@@ -43,7 +45,31 @@ namespace Calculator.ViewModel
             }
         }
 
+        private ObservableCollection<string> historyItems = new ObservableCollection<string>();
+        public ObservableCollection<string> HistoryItems
+        {
+            get { return historyItems; }
+            set
+            {
+                historyItems = value;
+                OnPropertyChanged("HistoryItems");
+            }
+        }
+
+        private Visibility historyVisibility = Visibility.Collapsed;
+        public Visibility HistoryVisibility
+        {
+            get { return historyVisibility; }
+            set
+            {
+                historyVisibility = value;
+                OnPropertyChanged("HistoryVisibility");
+            }
+        }
+
         public ICommand NumberCommand { get; }
+        public ICommand HistoryCommand { get; }
+        public ICommand PlusMinusCommand { get; }
         public ICommand AcCommand { get; }
         public ICommand BracketCommand { get; }
         public ICommand PercentCommand { get; }
@@ -57,7 +83,9 @@ namespace Calculator.ViewModel
         public CalculatorViewModel()
         {
             NumberCommand = new RelayCommand<string>(executeNumberCommand);
+            HistoryCommand = new RelayCommand<string>(executeHistoryCommand);
             AcCommand = new RelayCommand<string>(executeAcCommand);
+            PlusMinusCommand = new RelayCommand<string>(executePlusMinusCommand);
             PercentCommand = new RelayCommand<string>(executePercentCommand);
             OperatorCommand = new RelayCommand<string>(executeOperatorCommand);
             EqualCommand = new RelayCommand<string>(executeEqualCommand);
@@ -78,6 +106,12 @@ namespace Calculator.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        /**
+        * @brief 연산자의 우선순위를 나타내는 메서드
+        * @param op: 입력 받은 연산자
+        * @note Patch-notes
+        * 2023-08-14 | 박유진 | 
+        */
         public int GetPrecedence(string op)
         {
             switch (op)
@@ -101,7 +135,7 @@ namespace Calculator.ViewModel
 
         /**
         * @brief 중위표기법으로 표현된 수식을 후위표기법으로 변환하는 메서드
-        * @param propertyName: 변경된 속성의 이름
+        * @param expression: 중위표기법으로 입력 받은 수식, token: 수식을 띄어쓰기를 기준으로 나눈 값
         * @note Patch-notes
         * 2023-08-14 | 박유진 | 
         */
@@ -162,6 +196,20 @@ namespace Calculator.ViewModel
         }
 
         /**
+        * @brief History 버튼이 클릭되었을 때 호출되는 메서드
+        * @note Patch-notes
+        * 2023-08-10 | 박유진 |
+        */
+        private void executeHistoryCommand(object parameter)
+        {
+            if (!string.IsNullOrWhiteSpace(Expression) && !string.IsNullOrWhiteSpace(Result))
+            {
+                HistoryVisibility = Visibility.Visible;
+            }
+
+        }
+
+        /**
         * @brief AC 버튼이 클릭되었을 때 호출되는 메서드
         * @note Patch-notes
         * 2023-08-10 | 박유진 | AC 버튼이 클릭될 때마다 호출되어 결과를 0으로 초기화, 마지막 숫자와 선택된 연산자를 초기화
@@ -186,6 +234,8 @@ namespace Calculator.ViewModel
             {
                 numericResult *= -1;
                 Result = numericResult.ToString();
+                Expression = numericResult.ToString();
+
             }
         }
 
@@ -224,7 +274,7 @@ namespace Calculator.ViewModel
         * @brief +, -, x, / 버튼이 클릭되었을 때 호출되는 메서드
         * @param op: 입력된 연산자
         * @note Patch-notes
-        * 2023-08-10 | 박유진 | 입력된 연산자에 따라 selectedOperator를 설정하고 현재 표시된 숫자를 lastNumber로 저장
+        * 2023-08-10 | 박유진 | 입력된 연산자를 수식에 저장
         */
         private void executeOperatorCommand(object parameter)
         {
@@ -260,6 +310,9 @@ namespace Calculator.ViewModel
                 string[] postfixTokens = postfixExpression.Split(' ');
 
                 Stack<double> valueStack = new Stack<double>();
+
+                string historyEntry = $"{Expression} = {Result}";
+                HistoryItems.Add(historyEntry);
 
                 foreach (string token in postfixTokens)
                 {
@@ -303,11 +356,23 @@ namespace Calculator.ViewModel
             }
         }
 
+        /**
+        * @brief 연산자 버튼인지 판별하는 메서드
+        * @param token: 저장된 연산자
+        * @note Patch-notes
+        * 2023-08-10 | 박유진 |
+        */
         private bool IsOperator(string token)
         {
             return token == "+" || token == "-" || token == "x" || token == "/";
         }
 
+        /**
+        * @brief 연산을 수행하는 메서드
+        * @param operand1: 첫 번째 피연산자, operand2: 두 번째 피연산자, operatorSymbol: 연산자
+        * @note Patch-notes
+        * 2023-08-10 | 박유진 |
+        */
         private double PerformOperation(double operand1, double operand2, string operatorSymbol)
         {
             switch (operatorSymbol)
