@@ -89,6 +89,8 @@ namespace Calculator.ViewModel
         public ICommand OperatorCommand { get; }
         public ICommand EqualCommand { get; }
         public ICommand DotCommand { get; }
+        public ICommand CopyCommand { get; }
+        public ICommand PasteCommand { get; }
 
         #endregion
 
@@ -103,6 +105,8 @@ namespace Calculator.ViewModel
             OperatorCommand = new RelayCommand<string>(executeOperatorCommand);
             EqualCommand = new RelayCommand<string>(executeEqualCommand);
             DotCommand = new RelayCommand<string>(executeDotCommand);
+            CopyCommand = new RelayCommand<object>(executeCopyCommand);
+            PasteCommand = new RelayCommand<object>(executePasteCommand);
         }
 
         #endregion
@@ -371,6 +375,20 @@ namespace Calculator.ViewModel
                 {
                     Result = "Error";
                 }
+            }
+        }
+
+        private void executeCopyCommand(object parameter)
+        {
+            Clipboard.SetText(Result);
+        }
+
+        private void executePasteCommand(object parameter)
+        {
+            if (Clipboard.ContainsText())
+            {
+                Result = Clipboard.GetText();
+                Expression = Result;
             }
         }
 

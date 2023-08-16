@@ -27,6 +27,8 @@
         <KeyBinding Key="Divide" Command="{Binding OperatorCommand}" CommandParameter="/"/>
         <KeyBinding Key="Enter" Command="{Binding EqualCommand}"/>
         <KeyBinding Key="OemPeriod" Command="{Binding DotCommand}"/>
+        <KeyBinding Key="C" Modifiers="Ctrl" Command="{Binding CopyCommand}"/>
+        <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding PasteCommand}"/>
     </Window.InputBindings>
     <Window.Resources>
         <Style x:Key="number_button_style" TargetType="Button">
@@ -301,6 +303,5 @@
                 Margin="5,5,5,5"
                 Command="{Binding DotCommand}"
                 />
-
     </Grid>
 </Window>
