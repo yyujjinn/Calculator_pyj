@@ -146,11 +146,20 @@ namespace Calculator.ViewModel
                             postfixTokens.Add(operatorStack.Pop().ToString());
                         }
                         else
-                        {
                             break;
-                        }
+                        
+                        
+                        //if (GetPrecedence(token) > GetPrecedence(operatorStack.Peek()))
+                        //{
+                        //    operatorStack.Push(token);
+                        //    break;
+                        //}
+                        //else
+                        //{
+                        //    postfixTokens.Add(operatorStack.Pop().ToString());
+                        //}
                     }
-                    operatorStack.Push(token);
+                     operatorStack.Push(token);
                 }
             }
 
@@ -319,7 +328,7 @@ namespace Calculator.ViewModel
 
                             if (operand2 != 0)
                             {
-                                double result = PerformOperation(operand1, operand2, selectedOperator);
+                                double result = PerformOperation(operand1, operand2, token);
                                 valueStack.Push(result);
                             }
                             else
@@ -351,17 +360,17 @@ namespace Calculator.ViewModel
             return token == "+" || token == "-" || token == "x" || token == "/";
         }
 
-        private double PerformOperation(double operand1, double operand2, SelectedOperator selectedOperator)
+        private double PerformOperation(double operand1, double operand2, string operatorSymbol)
         {
-            switch (selectedOperator)
+            switch (operatorSymbol)
             {
-                case SelectedOperator.Addiction:
+                case "+":
                     return operand1 + operand2;
-                case SelectedOperator.Substraction:
+                case "-":
                     return operand1 - operand2;
-                case SelectedOperator.Multiplication:
+                case "x":
                     return operand1 * operand2;
-                case SelectedOperator.Division:
+                case "/":
                     if (operand2 != 0)
                     {
                         return operand1 / operand2;
