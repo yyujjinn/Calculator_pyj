@@ -26,6 +26,7 @@
         <KeyBinding Key="Multiply" Command="{Binding OperatorCommand}" CommandParameter="x"/>
         <KeyBinding Key="Divide" Command="{Binding OperatorCommand}" CommandParameter="/"/>
         <KeyBinding Key="Enter" Command="{Binding EqualCommand}"/>
+        <KeyBinding Key="Esc" Command="{Binding AcCommand}"/>
         <KeyBinding Key="OemPeriod" Command="{Binding DotCommand}"/>
         <KeyBinding Key="C" Modifiers="Ctrl" Command="{Binding CopyCommand}"/>
         <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding PasteCommand}"/>

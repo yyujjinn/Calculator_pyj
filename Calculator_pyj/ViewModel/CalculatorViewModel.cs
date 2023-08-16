@@ -14,13 +14,16 @@ namespace Calculator.ViewModel
         #region [변수]
         string result;
         string expression;
-        Stack<string> operatorStack = new Stack<string>();
-        List<string> postfixTokens = new List<string>();
         public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
 
         #region [필드]
+        Stack<string> operatorStack = new Stack<string>();
+        List<string> postfixTokens = new List<string>();
+        private ObservableCollection<string> historyItems = new ObservableCollection<string>();
+        private Visibility historyVisibility = Visibility.Collapsed;
+        private bool isHistoryOpen;
 
         #endregion
 
@@ -45,7 +48,6 @@ namespace Calculator.ViewModel
             }
         }
 
-        private ObservableCollection<string> historyItems = new ObservableCollection<string>();
         public ObservableCollection<string> HistoryItems
         {
             get { return historyItems; }
@@ -56,7 +58,6 @@ namespace Calculator.ViewModel
             }
         }
 
-        private Visibility historyVisibility = Visibility.Collapsed;
         public Visibility HistoryVisibility
         {
             get { return historyVisibility; }
@@ -67,7 +68,6 @@ namespace Calculator.ViewModel
             }
         }
 
-        private bool isHistoryOpen;
         public bool IsHistoryOpen
         {
             get { return isHistoryOpen; }
@@ -148,6 +148,50 @@ namespace Calculator.ViewModel
                 default:
                     return 0;
             }
+        }
+
+        /**
+        * @brief 연산자 버튼인지 판별하는 메서드
+        * @param token: 저장된 연산자
+        * @note Patch-notes
+        * 2023-08-10 | 박유진 |
+        */
+        private bool IsOperator(string token)
+        {
+            return token == "+" || token == "-" || token == "x" || token == "/";
+        }
+
+        /**
+        * @brief 연산을 수행하는 메서드
+        * @param operand1: 첫 번째 피연산자, operand2: 두 번째 피연산자, operatorSymbol: 연산자
+        * @note Patch-notes
+        * 2023-08-10 | 박유진 |
+        */
+        private double PerformOperation(double operand1, double operand2, string operatorSymbol)
+        {
+            switch (operatorSymbol)
+            {
+                case "+":
+                    return operand1 + operand2;
+                case "-":
+                    return operand1 - operand2;
+                case "x":
+                    return operand1 * operand2;
+                case "/":
+                    if (operand2 != 0)
+                    {
+                        return operand1 / operand2;
+                    }
+                    else
+                    {
+                        Result = "Error";
+                        return 0;
+                    }
+
+            }
+            return 0;
+
+            #endregion
         }
 
         /**
@@ -390,50 +434,6 @@ namespace Calculator.ViewModel
                 Result = Clipboard.GetText();
                 Expression = Result;
             }
-        }
-
-        /**
-        * @brief 연산자 버튼인지 판별하는 메서드
-        * @param token: 저장된 연산자
-        * @note Patch-notes
-        * 2023-08-10 | 박유진 |
-        */
-        private bool IsOperator(string token)
-        {
-            return token == "+" || token == "-" || token == "x" || token == "/";
-        }
-
-        /**
-        * @brief 연산을 수행하는 메서드
-        * @param operand1: 첫 번째 피연산자, operand2: 두 번째 피연산자, operatorSymbol: 연산자
-        * @note Patch-notes
-        * 2023-08-10 | 박유진 |
-        */
-        private double PerformOperation(double operand1, double operand2, string operatorSymbol)
-        {
-            switch (operatorSymbol)
-            {
-                case "+":
-                    return operand1 + operand2;
-                case "-":
-                    return operand1 - operand2;
-                case "x":
-                    return operand1 * operand2;
-                case "/":
-                    if (operand2 != 0)
-                    {
-                        return operand1 / operand2;
-                    }
-                    else
-                    {
-                        Result = "Error";
-                        return 0;
-                    }
-
-            }
-            return 0;
-
-            #endregion
         }
 
     }
