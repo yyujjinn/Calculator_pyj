@@ -12,7 +12,6 @@ namespace Calculator.ViewModel
         #region [변수]
         string result;
         string expression;
-        SelectedOperator selectedOperator;
         Stack<string> operatorStack = new Stack<string>();
         List<string> postfixTokens = new List<string>();
         public event PropertyChangedEventHandler PropertyChanged;
@@ -20,14 +19,6 @@ namespace Calculator.ViewModel
         #endregion
 
         #region [필드]
-        public enum SelectedOperator
-        {
-            None,
-            Addiction,
-            Substraction,
-            Multiplication,
-            Division
-        }
 
         #endregion
 
@@ -67,7 +58,6 @@ namespace Calculator.ViewModel
         {
             NumberCommand = new RelayCommand<string>(executeNumberCommand);
             AcCommand = new RelayCommand<string>(executeAcCommand);
-            BracketCommand = new RelayCommand<string>(executeBracketCommand);
             PercentCommand = new RelayCommand<string>(executePercentCommand);
             OperatorCommand = new RelayCommand<string>(executeOperatorCommand);
             EqualCommand = new RelayCommand<string>(executeEqualCommand);
@@ -125,18 +115,6 @@ namespace Calculator.ViewModel
                 {
                     postfixTokens.Add(token);
                 }
-                else if (token == "(")
-                {
-                    operatorStack.Push(token);
-                }
-                else if (token == ")")
-                {
-                    while (operatorStack.Peek() != "(")
-                    {
-                        postfixTokens.Add(operatorStack.Pop().ToString());
-                    }
-                    operatorStack.Pop();
-                }
                 else
                 {
                     while (operatorStack.Count != 0)
@@ -147,19 +125,8 @@ namespace Calculator.ViewModel
                         }
                         else
                             break;
-                        
-                        
-                        //if (GetPrecedence(token) > GetPrecedence(operatorStack.Peek()))
-                        //{
-                        //    operatorStack.Push(token);
-                        //    break;
-                        //}
-                        //else
-                        //{
-                        //    postfixTokens.Add(operatorStack.Pop().ToString());
-                        //}
                     }
-                     operatorStack.Push(token);
+                    operatorStack.Push(token);
                 }
             }
 
@@ -203,7 +170,6 @@ namespace Calculator.ViewModel
         {
             Result = "0";
             Expression = "0";
-            selectedOperator = SelectedOperator.None;
             operatorStack.Clear();
             postfixTokens.Clear();
         }
@@ -214,22 +180,15 @@ namespace Calculator.ViewModel
         * @note Patch-notes
         * 2023-08-10 | 박유진 | +/- 버튼이 클릭될 때마다 호출되어 입력된 숫자의 부호를 변경, 결과를 string으로 변경
         */
-        private void executeBracketCommand(object parameter)
+        private void executePlusMinusCommand(object parameter)
         {
-            if (parameter is string bracket)
+            if (double.TryParse(Result, out double numericResult))
             {
-                if (Result == "0")
-                {
-                    Result = bracket;
-                    Expression = bracket;
-                }
-                else
-                {
-                    Result += bracket;
-                    Expression += bracket;
-                }
+                numericResult *= -1;
+                Result = numericResult.ToString();
             }
         }
+
 
         /**
         * @brief % 버튼이 클릭되었을 때 호출되는 메서드
@@ -271,27 +230,16 @@ namespace Calculator.ViewModel
         {
             if (parameter is string op)
             {
-
                 switch (op)
                 {
                     case "+":
-                        selectedOperator = SelectedOperator.Addiction;
-                        break;
                     case "-":
-                        selectedOperator = SelectedOperator.Substraction;
-                        break;
                     case "x":
-                        selectedOperator = SelectedOperator.Multiplication;
-                        break;
                     case "/":
-                        selectedOperator = SelectedOperator.Division;
-                        break;
-                    default:
-                        selectedOperator = SelectedOperator.None;
+                        Expression += " " + op + " ";
+                        Result = "";
                         break;
                 }
-                Expression += " " + op + " ";
-                Result = "";
             }
         }
 

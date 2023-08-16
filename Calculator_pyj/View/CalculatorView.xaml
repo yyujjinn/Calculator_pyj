@@ -64,6 +64,7 @@
                 Margin="5,5,5,-12"
                 Content="0"
                 Command="{Binding NumberCommand}"
+                Grid.ColumnSpan="2"
                 CommandParameter="0"
                 />
         <!--숫자 버튼 1-->
@@ -150,7 +151,7 @@
 
         <!--연산버튼 AC-->
         <Button x:Name="AcButton"
-                Grid.Column="3" 
+                Grid.Column="0" 
                 Grid.Row="2" 
                 Content="AC" 
                 Foreground="Black" 
@@ -159,29 +160,7 @@
                 Margin="5,5,5,5" 
                 Command="{Binding AcCommand}"
                 />
-        <!--연산버튼 괄호-->
-        <Button x:Name="BracketButton1"
-                Grid.Column="0" 
-                Grid.Row="2" 
-                Content="(" 
-                Foreground="Black" 
-                Background="LavenderBlush" 
-                FontSize="30" 
-                Margin="5,5,5,5" 
-                Command="{Binding BracketCommand}"
-                CommandParameter="("
-                />
-        <Button x:Name="BracketButton2"
-                Grid.Column="1" 
-                Grid.Row="2" 
-                Content=")" 
-                Foreground="Black" 
-                Background="LavenderBlush" 
-                FontSize="30" 
-                Margin="5,5,5,5" 
-                Command="{Binding BracketCommand}"
-                CommandParameter=")"
-                />
+
         <!--연산버튼 Percent-->
         <Button x:Name="PercentButton"
                 Grid.Column="2" 
@@ -193,10 +172,21 @@
                 Margin="5,5,5,5"
                 Command="{Binding PercentCommand}"
                 />
+        <!--연산버튼 Plus/Minus-->
+        <Button x:Name="PlusMinusButton" 
+                Grid.Column="1"
+                Grid.Row="2" 
+                Content="+/-" 
+                Foreground="Black" 
+                Background="LavenderBlush" 
+                FontSize="30" 
+                Margin="5,5,5,5"
+                Command="{Binding PlusMinusCommand}"
+                />
         <!--연산버튼 Devide-->
         <Button x:Name="DevideButton" 
                 Grid.Column="3" 
-                Grid.Row="3" 
+                Grid.Row="2" 
                 Content="/" 
                 Style="{StaticResource operator_button_style}"
                 Command="{Binding OperatorCommand}"
@@ -205,7 +195,7 @@
         <!--연산버튼 Multiple-->
         <Button x:Name="MultipleButton" 
                 Grid.Column="3" 
-                Grid.Row="4" 
+                Grid.Row="3" 
                 Content="x" 
                 Style="{StaticResource operator_button_style}"
                 Command="{Binding OperatorCommand}"
@@ -214,7 +204,7 @@
         <!--연산버튼 Plus-->
         <Button x:Name="PlusButton" 
                 Grid.Column="3" 
-                Grid.Row="5" 
+                Grid.Row="4" 
                 Content="+" 
                 Style="{StaticResource operator_button_style}"
                 Command="{Binding OperatorCommand}"
@@ -223,16 +213,16 @@
         <!--연산버튼 Minus-->
         <Button x:Name="MinusButton" 
                 Grid.Column="3" 
-                Grid.Row="6" 
+                Grid.Row="5" 
                 Content="-" 
                 Style="{StaticResource operator_button_style}"
-                Margin="5,5,5,-12"
+                Margin="5,5,5,5"
                 Command="{Binding OperatorCommand}"
                 CommandParameter="-"
                 />
         <!--연산버튼 Equal-->
         <Button x:Name="EqualButton" 
-                Grid.Column="2" 
+                Grid.Column="3" 
                 Grid.Row="6" 
                 Content="=" 
                 Foreground="Black" 
@@ -243,7 +233,7 @@
                 />
         <!--연산버튼 Dot-->
         <Button x:Name="DotButton" 
-                Grid.Column="1" 
+                Grid.Column="2" 
                 Grid.Row="6" 
                 Content="." 
                 Foreground="Black" 
