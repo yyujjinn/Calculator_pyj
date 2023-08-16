@@ -43,12 +43,12 @@
             <ColumnDefinition Width="50"/>
         </Grid.ColumnDefinitions>
         <!--History 버튼-->
-        <Button x:Name="HistoryButton"
+        <ToggleButton x:Name="HistoryButton"
                 Grid.Column="4"
                 Grid.Row="0"
-                Width="30"
                 Background="White"
                 BorderThickness="0"
+                IsChecked="{Binding IsHistoryOpen}"
                 Command="{Binding HistoryCommand}"
                 >
             <ContentControl>
@@ -57,7 +57,7 @@
                        HorizontalAlignment="Right">
                 </Image>
             </ContentControl>
-        </Button>
+        </ToggleButton>
         <!--History 목록-->
         <ListBox ItemsSource="{Binding HistoryItems}"
                  Visibility="{Binding HistoryVisibility}"

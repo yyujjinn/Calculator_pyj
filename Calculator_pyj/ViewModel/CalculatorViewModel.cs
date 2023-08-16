@@ -67,6 +67,19 @@ namespace Calculator.ViewModel
             }
         }
 
+        private bool isHistoryOpen;
+        public bool IsHistoryOpen
+        {
+            get { return isHistoryOpen; }
+            set
+            {
+                isHistoryOpen = value;
+                OnPropertyChanged("IsHistoryOpen");
+
+                HistoryVisibility = isHistoryOpen ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
         public ICommand NumberCommand { get; }
         public ICommand HistoryCommand { get; }
         public ICommand PlusMinusCommand { get; }
@@ -83,7 +96,7 @@ namespace Calculator.ViewModel
         public CalculatorViewModel()
         {
             NumberCommand = new RelayCommand<string>(executeNumberCommand);
-            HistoryCommand = new RelayCommand<string>(executeHistoryCommand);
+            HistoryCommand = new RelayCommand<object>(executeHistoryCommand);
             AcCommand = new RelayCommand<string>(executeAcCommand);
             PlusMinusCommand = new RelayCommand<string>(executePlusMinusCommand);
             PercentCommand = new RelayCommand<string>(executePercentCommand);
@@ -202,11 +215,14 @@ namespace Calculator.ViewModel
         */
         private void executeHistoryCommand(object parameter)
         {
-            if (!string.IsNullOrWhiteSpace(Expression) && !string.IsNullOrWhiteSpace(Result))
+            if (IsHistoryOpen)
             {
                 HistoryVisibility = Visibility.Visible;
             }
-
+            else
+            {
+                HistoryVisibility = Visibility.Collapsed;
+            }
         }
 
         /**
@@ -311,8 +327,7 @@ namespace Calculator.ViewModel
 
                 Stack<double> valueStack = new Stack<double>();
 
-                string historyEntry = $"{Expression} = {Result}";
-                HistoryItems.Add(historyEntry);
+
 
                 foreach (string token in postfixTokens)
                 {
@@ -348,6 +363,9 @@ namespace Calculator.ViewModel
                 if (valueStack.Count == 1)
                 {
                     Result = valueStack.Pop().ToString();
+                    string historyEntry = $"{Expression} = {Result}";
+                    HistoryItems.Add(historyEntry);
+
                 }
                 else
                 {
