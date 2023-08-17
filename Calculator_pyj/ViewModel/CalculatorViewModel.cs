@@ -110,7 +110,7 @@ namespace Calculator.ViewModel
             CopyCommand = new RelayCommand<object>(executeCopyCommand);
             PasteCommand = new RelayCommand<object>(executePasteCommand);
             calculatorModel = new CalculatorModel();
-            performCalculator = new PerformCalculator();
+            //performCalculator = new PerformCalculator();
         }
 
         #endregion
@@ -281,16 +281,24 @@ namespace Calculator.ViewModel
                         {
                             double operand2 = valueStack.Pop();
                             double operand1 = valueStack.Pop();
+                            double value=0.0;
+                            performCalculator = new PerformCalculator(value);
 
                             if (operand2 != 0)
                             {
                                 switch (token)
                                 {
                                     case "+":
-                                        result = performCalculator.PerformAddition(operand1, operand2);
+                                        PerformCalculator a = new PerformCalculator(operand1);
+                                        PerformCalculator b = new PerformCalculator(operand2);
+                                        PerformCalculator c = a + b;
+                                        result = c.Value;
                                         break;
                                     case "-":
-                                        result = performCalculator.PerformSubtraction(operand1, operand2);
+                                        PerformCalculator d = new PerformCalculator(operand1);
+                                        PerformCalculator e = new PerformCalculator(operand2);
+                                        PerformCalculator f = d - e;
+                                        result = f.Value;
                                         break;
                                     case "x":
                                         result = performCalculator.PerformMultiplication(operand1, operand2);
