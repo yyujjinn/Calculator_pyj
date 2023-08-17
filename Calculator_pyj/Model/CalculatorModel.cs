@@ -101,7 +101,7 @@ namespace Calculator_pyj.Model
         * @note Patch-notes
         * 2023-08-10 | 박유진 | 첫 번째 입력 값과 두 번째 입력 값을 곱해줌
         */
-        public double Muliple(double n1, double n2)
+        public double Multiple(double n1, double n2)
         {
             return n1 * n2;
         }
@@ -171,7 +171,7 @@ namespace Calculator_pyj.Model
 
         public double PerformMultiplication(double n1, double n2)
         {
-            return Muliple(n1, n2);
+            return Multiple(n1, n2);
         }
 
         /**
