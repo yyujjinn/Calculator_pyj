@@ -11,7 +11,7 @@ namespace Calculator.ViewModel
     public class CalculatorViewModel : INotifyPropertyChanged
     {
 
-        #region [변수]
+        #region [상수]
         string result;
         string expression;
         public event PropertyChangedEventHandler PropertyChanged;
