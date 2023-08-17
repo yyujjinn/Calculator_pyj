@@ -1,10 +1,10 @@
 ﻿using Calculator_pyj.Model;
 using Calculator_pyj.ViewModel;
-using System.ComponentModel;
-using System.Windows.Input;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Calculator.ViewModel
 {
@@ -25,6 +25,7 @@ namespace Calculator.ViewModel
         private Visibility historyVisibility = Visibility.Collapsed;
         private bool isHistoryOpen;
         private CalculatorModel calculatorModel;
+        private PerformCalculator performCalculator;
 
         #endregion
 
@@ -109,6 +110,7 @@ namespace Calculator.ViewModel
             CopyCommand = new RelayCommand<object>(executeCopyCommand);
             PasteCommand = new RelayCommand<object>(executePasteCommand);
             calculatorModel = new CalculatorModel();
+            performCalculator = new PerformCalculator();
         }
 
         #endregion
@@ -191,7 +193,6 @@ namespace Calculator.ViewModel
                 numericResult *= -1;
                 Result = numericResult.ToString();
                 Expression = numericResult.ToString();
-
             }
         }
 
@@ -262,12 +263,11 @@ namespace Calculator.ViewModel
             CalculatorModel calModel = new CalculatorModel();
             if (!string.IsNullOrWhiteSpace(Expression))
             {
-                string postfixExpression = calculatorModel.ConvertToPostfix(Expression);
+                string postfixExpression = calModel.ConvertToPostfix(Expression);
                 string[] postfixTokens = postfixExpression.Split(' ');
+                double result = 0.0;
 
                 Stack<double> valueStack = new Stack<double>();
-
-
 
                 foreach (string token in postfixTokens)
                 {
@@ -275,7 +275,7 @@ namespace Calculator.ViewModel
                     {
                         valueStack.Push(numericValue);
                     }
-                    else if (calculatorModel.IsOperator(token))
+                    else if (calModel.IsOperator(token))
                     {
                         if (valueStack.Count >= 2)
                         {
@@ -284,14 +284,27 @@ namespace Calculator.ViewModel
 
                             if (operand2 != 0)
                             {
-                                double result = calculatorModel.PerformOperation(operand1, operand2, token);
+                                switch (token)
+                                {
+                                    case "+":
+                                        result = performCalculator.PerformAddition(operand1, operand2);
+                                        break;
+                                    case "-":
+                                        result = performCalculator.PerformSubtraction(operand1, operand2);
+                                        break;
+                                    case "x":
+                                        result = performCalculator.PerformMultiplication(operand1, operand2);
+                                        break;
+                                    case "/":
+                                        result = performCalculator.PerformDivision(operand1, operand2);
+                                        break;
+                                }
                                 valueStack.Push(result);
                             }
                             else
                             {
                                 Result = "Error";
                             }
-
                         }
                         else
                         {

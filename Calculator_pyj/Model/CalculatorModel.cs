@@ -4,8 +4,6 @@ namespace Calculator_pyj.Model
 {
     class CalculatorModel
     {
-        string result;
-        string expression;
         Stack<string> operatorStack = new Stack<string>();
         List<string> postfixTokens = new List<string>();
 
@@ -48,39 +46,6 @@ namespace Calculator_pyj.Model
         }
 
         /**
-        * @brief 연산을 수행하는 메서드
-        * @param operand1: 첫 번째 피연산자, operand2: 두 번째 피연산자, operatorSymbol: 연산자
-        * @note Patch-notes
-        * 2023-08-10 | 박유진 |
-        */
-        public double PerformOperation(double operand1, double operand2, string operatorSymbol)
-        {
-            switch (operatorSymbol)
-            {
-                case "+":
-                    return operand1 + operand2;
-                case "-":
-                    return operand1 - operand2;
-                case "x":
-                    return operand1 * operand2;
-                case "/":
-                    if (operand2 != 0)
-                    {
-                        return operand1 / operand2;
-                    }
-                    else
-                    {
-                        result = "Error";
-                        return 0;
-                    }
-
-            }
-            return 0;
-
-
-        }
-
-        /**
         * @brief 중위표기법으로 표현된 수식을 후위표기법으로 변환하는 메서드
         * @param expression: 중위표기법으로 입력 받은 수식, token: 수식을 띄어쓰기를 기준으로 나눈 값
         * @note Patch-notes
@@ -117,6 +82,80 @@ namespace Calculator_pyj.Model
             }
 
             return string.Join(" ", postfixTokens);
+        }
+    }
+
+    public class BaseCalculator
+    {
+        /**
+        * @brief 숫자를 더하는 함수
+        * @param n1: 첫 번째 숫자, n2: 두 번째 숫자
+        * @return n1 + n2: 두 숫자의 합
+        * @note Patch-notes
+        * 2023-08-10 | 박유진 | 첫 번째 입력 값과 두 번째 입력 값을 더해줌
+        */
+        public double Add(double n1, double n2)
+        {
+            return n1 + n2;
+        }
+
+        /**
+        * @brief 숫자를 빼는 함수
+        * @param n1: 첫 번째 숫자, n2: 두 번째 숫자
+        * @return n1 - n2: 첫 번째 숫자에서 두 번째 숫자를 뺀 값
+        * @note Patch-notes
+        * 2023-08-10 | 박유진 | 첫 번째 입력 값에서 두 번째 입력 값을 빼줌
+        */
+        public double Subtract(double n1, double n2)
+        {
+            return n1 - n2;
+        }
+
+        /**
+        * @brief 숫자를 곱하는 함수
+        * @param n1: 첫 번째 숫자, n2: 두 번째 숫자
+        * @return n1 * n2: 두 숫자의 곱
+        * @note Patch-notes
+        * 2023-08-10 | 박유진 | 첫 번째 입력 값과 두 번째 입력 값을 곱해줌
+        */
+        public double Muliple(double n1, double n2)
+        {
+            return n1 * n2;
+        }
+
+        /**
+        * @brief 숫자를 나누는 함수
+        * @param n1: 첫 번째 숫자, n2: 두 번째 숫자
+        * @return n1 / n2: 첫 번째 숫자에서 두 번째 숫자를 나눈 값
+        * @note Patch-notes
+        * 2023-08-10 | 박유진 | 첫 번째 입력 값에서 두 번째 입력 값을 나눠줌
+        */
+        public double Divide(double n1, double n2)
+        {
+            return n1 / n2;
+        }
+    }
+
+    public class PerformCalculator : BaseCalculator
+    {
+        public double PerformAddition(double n1, double n2)
+        {
+            return Add(n1, n2);
+        }
+
+        public double PerformSubtraction(double n1, double n2)
+        {
+            return Subtract(n1, n2);
+        }
+
+        public double PerformMultiplication(double n1, double n2)
+        {
+            return Muliple(n1, n2);
+        }
+
+        public double PerformDivision(double n1, double n2)
+        {
+            return Divide(n1, n2);
         }
     }
 }
