@@ -14,6 +14,7 @@ namespace Calculator.ViewModel
         #region [상수]
         string result;
         string expression;
+        string errorMessage;
         public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
@@ -176,6 +177,7 @@ namespace Calculator.ViewModel
         {
             Result = "0";
             Expression = "0";
+            errorMessage = null;
             operatorStack.Clear();
             postfixTokens.Clear();
         }
@@ -284,34 +286,41 @@ namespace Calculator.ViewModel
                             double value=0.0;
                             performCalculator = new PerformCalculator(value);
 
-                            if (operand2 != 0)
+                            switch (token)
                             {
-                                switch (token)
-                                {
-                                    case "+":
-                                        PerformCalculator a = new PerformCalculator(operand1);
-                                        PerformCalculator b = new PerformCalculator(operand2);
-                                        PerformCalculator c = a + b;
-                                        result = c.Value;
-                                        break;
-                                    case "-":
-                                        PerformCalculator d = new PerformCalculator(operand1);
-                                        PerformCalculator e = new PerformCalculator(operand2);
-                                        PerformCalculator f = d - e;
-                                        result = f.Value;
-                                        break;
-                                    case "x":
-                                        result = performCalculator.PerformMultiplication(operand1, operand2);
-                                        break;
-                                    case "/":
+                                case "+":
+                                    PerformCalculator a = new PerformCalculator(operand1);
+                                    PerformCalculator b = new PerformCalculator(operand2);
+                                    PerformCalculator c = a + b;
+                                    result = c.Value;
+                                    break;
+                                case "-":
+                                    PerformCalculator d = new PerformCalculator(operand1);
+                                    PerformCalculator e = new PerformCalculator(operand2);
+                                    PerformCalculator f = d - e;
+                                    result = f.Value;
+                                    break;
+                                case "x":
+                                    result = performCalculator.PerformMultiplication(operand1, operand2);
+                                    break;
+                                case "/":
+                                    if (operand2 != 0)
+                                    {
                                         result = performCalculator.PerformDivision(operand1, operand2);
-                                        break;
-                                }
+                                    }
+                                    else
+                                    {
+                                        errorMessage = "Error";
+                                    }
+                                    break;
+                            }
+                            if (errorMessage == null)
+                            {
                                 valueStack.Push(result);
                             }
                             else
                             {
-                                Result = "Error";
+                                Result = errorMessage;
                             }
                         }
                         else
