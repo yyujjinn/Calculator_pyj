@@ -82,6 +82,7 @@
         <!--History 목록-->
         <ListBox ItemsSource="{Binding HistoryItems}"
                  Visibility="{Binding HistoryVisibility}"
+                 SelectedItem="{Binding SelectedHistoryItem}"
                  HorizontalAlignment="Left" 
                  VerticalAlignment="Bottom" 
                  Margin="5,0,0,5" 
@@ -93,7 +94,7 @@
                  Background="GhostWhite"
                  BorderBrush="LightSlateGray"
                  BorderThickness="3"
-                 FontSize="30"
+                 FontSize="25"
                  />
         <!--입력 식-->
         <Label x:Name="expressionLable"

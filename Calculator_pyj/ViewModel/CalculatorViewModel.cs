@@ -15,6 +15,7 @@ namespace Calculator.ViewModel
         string result;
         string expression;
         string errorMessage;
+        string selectedHistoryItem;
         public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
@@ -83,6 +84,26 @@ namespace Calculator.ViewModel
             }
         }
 
+        public string SelectedHistoryItem
+        {
+            get { return selectedHistoryItem; }
+            set
+            {
+                selectedHistoryItem = value;
+                if (!string.IsNullOrWhiteSpace(selectedHistoryItem))
+                {
+                    string[] historyParts = selectedHistoryItem.Split('=');
+                    if (historyParts.Length == 2)
+                    {
+                        Expression = historyParts[0].Trim();
+                        Result = historyParts[1].Trim();
+                    }
+                }
+                OnPropertyChanged("SelectedHistoryItem");
+            }
+        }
+
+
         public ICommand NumberCommand { get; }
         public ICommand HistoryCommand { get; }
         public ICommand PlusMinusCommand { get; }
@@ -111,7 +132,6 @@ namespace Calculator.ViewModel
             CopyCommand = new RelayCommand<object>(executeCopyCommand);
             PasteCommand = new RelayCommand<object>(executePasteCommand);
             calculatorModel = new CalculatorModel();
-            //performCalculator = new PerformCalculator();
         }
 
         #endregion
@@ -357,6 +377,7 @@ namespace Calculator.ViewModel
                 Expression = Result;
             }
         }
+
         #endregion
     }
 }
